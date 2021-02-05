@@ -31,7 +31,11 @@ export default {
             "api_key": process.env.VUE_APP_API_KEY
         })
         this.all_items = res.data.items;
-        this.items = this.all_items.slice(this.all_items.length - 3, this.all_items.length);
+        if (this.all_items.length >= 3){
+            this.items = this.all_items.slice(this.all_items.length - 3, this.all_items.length);
+        }else{
+            this.items = this.all_items;
+        }
     }
 }
 </script>

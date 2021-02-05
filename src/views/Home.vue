@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <Nav />
-    <h1>Home</h1>
+    <h1>Budgit</h1>
     <div class="content">
       <div class="items">
         <RecentItems id="items" />

@@ -6,6 +6,7 @@
         <input type="text" id="username" v-model="username" placeholder="Username" autocomplete="off"><br>
         <input type="password" id="password" v-model="password" placeholder="Password"><br>
         <input type="submit" value="SIGNIN" id = "button">
+        <p v-if="error" id="error">Sorry, your login could not be processed</p>
       </form>
     </div>
     <div class="signup">
@@ -31,11 +32,13 @@ export default {
     return {
       username: '',
       password: '',
+      error: false, 
     }
   }, 
   methods: {
     ...mapActions(['loginUser']),
     async login(){
+      this.error = false
       const res = await axios.post(`${process.env.VUE_APP_BASE}/login`, {
             api_key: process.env.VUE_APP_API_KEY,
             username: this.username, 
@@ -45,6 +48,8 @@ export default {
       if (res.data.login){
         this.loginUser(res.data.userid)
         this.$router.push("/")
+      }else{
+        this.error = true
       }
     }
   }, 
@@ -119,7 +124,7 @@ export default {
     grid-column: 2;
   }
 
-  h1, p{
+  h1, p, h2{
     color: #fff;
     text-transform: uppercase;
     font-weight: bold;
@@ -128,6 +133,11 @@ export default {
   #link{
     text-decoration: none;
     color: white
+  }
+
+  #error{
+    text-transform: none;
+    color: red;
   }
 </style>
 

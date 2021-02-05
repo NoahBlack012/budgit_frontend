@@ -4,13 +4,15 @@
       <h1>Budget</h1>
       <div class="container">
         <div class="new-item">
+          <h2 style="color:#FF4B2B">Add a Budget Item</h2>
           <AddItem v-on:add-item="additem" id="form" :categories="categories" />
           <AddCategory id="addcategory" v-on:add-category="add_category" />
         </div>
         
         <div class="items">
+          <h2 style="color:black">Your Recent Items</h2>
           <BudgetItems v-bind:items="items" v-on:del-item="deleteitem" />
-          <h3>Total: ${{total}}</h3>
+          <h3>Total: <span style="color:green">${{total}}</span></h3>
         </div>
       </div>
   </div>
@@ -42,15 +44,22 @@ export default {
   computed: mapGetters(['userid']),
   methods: {
     additem(newitem){
-      // Api call is made from AddItem component
-      this.all_items = [...this.all_items, newitem];
-      this.items = this.all_items.slice(this.all_items.length - 5, this.all_items.length)
+      this.all_items.push(newitem);
+      if (this.all_items.length >= 5){
+          this.items = this.all_items.slice(this.all_items.length - 5, this.all_items.length)
+      }else{
+        this.items = this.all_items
+      }
       this.getTotal();
     },
     deleteitem(id){
       // Make api call to delete item from db
       this.all_items = this.all_items.filter(item => item.id !== id); //Remove deleted item from list
-      this.items = this.all_items.slice(this.all_items.length - 5, this.all_items.length)
+      if (this.all_items.length >= 5){
+         this.items = this.all_items.slice(this.all_items.length - 5, this.all_items.length)
+      }else{
+        this.items = this.all_items
+      }
       axios.post(`${process.env.VUE_APP_BASE}/delete_item`, {
         "userid": this.userid, 
         "api_key": process.env.VUE_APP_API_KEY,
@@ -83,7 +92,11 @@ export default {
       "api_key": process.env.VUE_APP_API_KEY
     })
     this.all_items = res.data.items; 
-    this.items = this.all_items.slice(this.all_items.length - 5, this.all_items.length);
+    if (this.all_items.length >= 5){
+        this.items = this.all_items.slice(this.all_items.length - 5, this.all_items.length)
+    }else{
+      this.items = this.all_items
+    }
     this.getTotal();
 
     const category_res = await axios.post(`${process.env.VUE_APP_BASE}/get_categories`, {

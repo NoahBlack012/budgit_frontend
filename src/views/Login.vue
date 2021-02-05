@@ -6,7 +6,7 @@
         <input type="text" id="username" v-model="username" placeholder="Username" autocomplete="off"><br>
         <input type="password" id="password" v-model="password" placeholder="Password"><br>
         <input type="submit" value="SIGNIN" id = "button">
-        <p v-if="error" id="error">Sorry, your login could not be processed</p>
+        <p v-if="error" id="error">Incorrect Login</p>
       </form>
     </div>
     <div class="signup">
